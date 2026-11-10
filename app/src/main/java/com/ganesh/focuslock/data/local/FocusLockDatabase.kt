@@ -17,7 +17,7 @@ import com.ganesh.focuslock.data.local.entity.RestrictedAppEntity
         FocusSessionEntity::class,
         DailyUsageEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class FocusLockDatabase : RoomDatabase() {
@@ -42,4 +42,3 @@ abstract class FocusLockDatabase : RoomDatabase() {
         }
     }
 }
-

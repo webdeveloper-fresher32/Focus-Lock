@@ -76,7 +76,7 @@ class AppRepositoryImpl(
                         appName = appName,
                         category = category,
                         isRestrictedInFocus = isDistractingByDefault,
-                        dailyLimitMinutes = if (isDistractingByDefault) 45 else null,
+                        dailyLimitMinutes = null, // IMPORTANT: Never set daily limits automatically
                         isHardBlocked = false
                     )
                 }
@@ -85,6 +85,9 @@ class AppRepositoryImpl(
             if (entities.isNotEmpty()) {
                 appDao.insertAllIgnore(entities)
             }
+
+            // Clean up any stale 45-minute daily limits from previous versions
+            appDao.resetDefaultDailyLimits()
         }
     }
 
@@ -137,4 +140,3 @@ class AppRepositoryImpl(
         isHardBlocked = isHardBlocked
     )
 }
-

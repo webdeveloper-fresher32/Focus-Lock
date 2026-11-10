@@ -10,11 +10,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FocusSessionDao {
-    @Query("SELECT * FROM focus_sessions WHERE sessionStatus = 'RUNNING' ORDER BY id DESC LIMIT 1")
-    fun getActiveSession(): Flow<FocusSessionEntity?>
+    @Query("SELECT * FROM focus_sessions WHERE sessionStatus = 'RUNNING' AND targetEndTimeEpochMs > :currentTimeMillis ORDER BY id DESC LIMIT 1")
+    fun getActiveSession(currentTimeMillis: Long): Flow<FocusSessionEntity?>
 
-    @Query("SELECT * FROM focus_sessions WHERE sessionStatus = 'RUNNING' ORDER BY id DESC LIMIT 1")
-    suspend fun getActiveSessionSync(): FocusSessionEntity?
+    @Query("SELECT * FROM focus_sessions WHERE sessionStatus = 'RUNNING' AND targetEndTimeEpochMs > :currentTimeMillis ORDER BY id DESC LIMIT 1")
+    suspend fun getActiveSessionSync(currentTimeMillis: Long): FocusSessionEntity?
+
+    @Query("UPDATE focus_sessions SET sessionStatus = 'COMPLETED', actualEndTimeEpochMs = targetEndTimeEpochMs WHERE sessionStatus = 'RUNNING' AND targetEndTimeEpochMs <= :currentTimeMillis")
+    suspend fun cleanUpExpiredSessions(currentTimeMillis: Long)
 
     @Query("SELECT * FROM focus_sessions ORDER BY id DESC")
     fun getAllSessions(): Flow<List<FocusSessionEntity>>
@@ -37,4 +40,3 @@ interface FocusSessionDao {
     @Query("SELECT SUM(durationMinutes) FROM focus_sessions WHERE sessionStatus = 'COMPLETED'")
     fun getTotalFocusMinutes(): Flow<Int?>
 }
-

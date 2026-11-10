@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface SessionRepository {
     fun getActiveSession(): Flow<FocusSession?>
     suspend fun getActiveSessionSync(): FocusSession?
+    suspend fun cleanupExpiredSessions()
     fun getAllSessions(): Flow<List<FocusSession>>
     fun getTotalDistractionsBlocked(): Flow<Int>
     fun getTotalFocusMinutes(): Flow<Int>
@@ -19,4 +20,3 @@ interface SessionRepository {
     suspend fun endSession(id: Long, status: SessionStatus)
     suspend fun incrementDistractionsBlocked(id: Long)
 }
-

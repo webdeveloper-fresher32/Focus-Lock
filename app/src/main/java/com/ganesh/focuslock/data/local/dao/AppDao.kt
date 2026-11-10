@@ -35,5 +35,7 @@ interface AppDao {
 
     @Query("UPDATE restricted_apps SET isHardBlocked = :isHardBlocked WHERE packageName = :packageName")
     suspend fun updateHardBlock(packageName: String, isHardBlocked: Boolean)
-}
 
+    @Query("UPDATE restricted_apps SET dailyLimitMinutes = NULL WHERE dailyLimitMinutes = 45")
+    suspend fun resetDefaultDailyLimits()
+}

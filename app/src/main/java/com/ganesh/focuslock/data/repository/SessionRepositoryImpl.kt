@@ -16,14 +16,30 @@ class SessionRepositoryImpl(
 ) : SessionRepository {
 
     override fun getActiveSession(): Flow<FocusSession?> {
-        return sessionDao.getActiveSession().map { entity ->
-            entity?.toDomain()
+        val now = System.currentTimeMillis()
+        return sessionDao.getActiveSession(now).map { entity ->
+            if (entity == null) return@map null
+            if (System.currentTimeMillis() >= entity.targetEndTimeEpochMs) {
+                null
+            } else {
+                entity.toDomain()
+            }
         }
     }
 
     override suspend fun getActiveSessionSync(): FocusSession? {
         return withContext(Dispatchers.IO) {
-            sessionDao.getActiveSessionSync()?.toDomain()
+            val now = System.currentTimeMillis()
+            // Clean up any session whose target time has elapsed
+            sessionDao.cleanUpExpiredSessions(now)
+            sessionDao.getActiveSessionSync(now)?.toDomain()
+        }
+    }
+
+    override suspend fun cleanupExpiredSessions() {
+        withContext(Dispatchers.IO) {
+            val now = System.currentTimeMillis()
+            sessionDao.cleanUpExpiredSessions(now)
         }
     }
 
@@ -48,6 +64,9 @@ class SessionRepositoryImpl(
     ): Long {
         return withContext(Dispatchers.IO) {
             val now = System.currentTimeMillis()
+            // First mark any previous expired sessions as complete
+            sessionDao.cleanUpExpiredSessions(now)
+
             val targetEnd = now + (durationMinutes * 60 * 1000L)
             val entity = FocusSessionEntity(
                 sessionName = name,
@@ -94,4 +113,3 @@ class SessionRepositoryImpl(
         distractionsBlockedCount = distractionsBlockedCount
     )
 }
-

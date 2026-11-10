@@ -28,7 +28,6 @@ class FocusLockAccessibilityService : AccessibilityService() {
         }
 
         val packageName = event.packageName?.toString() ?: return
-        val myPackage = packageName
 
         // Ignore our own app and system UI
         if (packageName == this.packageName || isSystemWhitelisted(packageName)) {
@@ -46,6 +45,9 @@ class FocusLockAccessibilityService : AccessibilityService() {
         val appRepo = app.appRepository
         val usageRepo = app.usageRepository
 
+        // Clean up any expired sessions first to ensure fresh state
+        sessionRepo.cleanupExpiredSessions()
+
         val activeSession = sessionRepo.getActiveSessionSync()
         var shouldBlock = false
         var reason = ""
@@ -59,10 +61,10 @@ class FocusLockAccessibilityService : AccessibilityService() {
         }
 
         if (!shouldBlock) {
-            // Check daily limit exceeded
+            // Check daily limit exceeded only if an explicit limit was set
             if (usageRepo.isAppExceedingDailyLimit(targetPackage)) {
                 shouldBlock = true
-                reason = "Daily app limit exceeded"
+                reason = "Daily app limit reached"
             }
         }
 
@@ -76,8 +78,8 @@ class FocusLockAccessibilityService : AccessibilityService() {
 
             Log.i(TAG, "Blocking restricted application: $targetPackage. Reason: $reason")
 
-            // Increment distraction stat if active session exists
-            if (activeSession != null) {
+            // Increment distraction stat only if active session exists
+            if (activeSession != null && !activeSession.isFinished) {
                 sessionRepo.incrementDistractionsBlocked(activeSession.id)
             }
 
@@ -88,7 +90,7 @@ class FocusLockAccessibilityService : AccessibilityService() {
                         Intent.FLAG_ACTIVITY_NO_ANIMATION
                 putExtra(BlockOverlayActivity.EXTRA_PACKAGE_NAME, targetPackage)
                 putExtra(BlockOverlayActivity.EXTRA_REASON, reason)
-                if (activeSession != null) {
+                if (activeSession != null && !activeSession.isFinished) {
                     putExtra(BlockOverlayActivity.EXTRA_SESSION_ID, activeSession.id)
                     putExtra(BlockOverlayActivity.EXTRA_SESSION_NAME, activeSession.sessionName)
                     putExtra(BlockOverlayActivity.EXTRA_TARGET_END_MS, activeSession.targetEndTimeEpochMs)
@@ -113,4 +115,3 @@ class FocusLockAccessibilityService : AccessibilityService() {
         Log.w(TAG, "Accessibility Service Interrupted")
     }
 }
-

@@ -29,6 +29,15 @@ class BlockOverlayActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val targetEndMs = intent.getLongExtra(EXTRA_TARGET_END_MS, 0L)
+        val now = System.currentTimeMillis()
+
+        // If a focus session was associated with this block and has already ended, dismiss immediately!
+        if (targetEndMs > 0L && now >= targetEndMs) {
+            finish()
+            return
+        }
+
         // Disable standard back button from dismissing overlay into restricted app
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -40,12 +49,11 @@ class BlockOverlayActivity : ComponentActivity() {
         val reason = intent.getStringExtra(EXTRA_REASON) ?: "Focus Lock Active"
         val sessionId = intent.getLongExtra(EXTRA_SESSION_ID, -1L)
         val sessionName = intent.getStringExtra(EXTRA_SESSION_NAME) ?: "Focus Session"
-        val targetEndMs = intent.getLongExtra(EXTRA_TARGET_END_MS, 0L)
-        val strictnessString = intent.getStringExtra(EXTRA_STRICTNESS) ?: "STRICT"
+        val strictnessString = intent.getStringExtra(EXTRA_STRICTNESS) ?: "NORMAL"
         val strictness = try {
             StrictnessLevel.valueOf(strictnessString)
         } catch (_: Exception) {
-            StrictnessLevel.STRICT
+            StrictnessLevel.NORMAL
         }
 
         setContent {
@@ -57,6 +65,7 @@ class BlockOverlayActivity : ComponentActivity() {
                     targetEndMs = targetEndMs,
                     strictness = strictness,
                     onReturnHome = { returnToHome() },
+                    onDismissCompleted = { finish() },
                     onOpenFocusLock = {
                         val mainIntent = Intent(this, MainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -88,4 +97,3 @@ class BlockOverlayActivity : ComponentActivity() {
         finish()
     }
 }
-
