@@ -1,5 +1,6 @@
 package com.ganesh.focuslock.presentation.blocker
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,10 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ganesh.focuslock.R
 import com.ganesh.focuslock.core.theme.*
 import com.ganesh.focuslock.core.utils.TimeUtils
 import com.ganesh.focuslock.domain.model.StrictnessLevel
@@ -56,21 +59,14 @@ fun BlockScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Lock Icon with Alert Halo
-            Box(
+            // App Logo Shield
+            Image(
+                painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = "FocusLock Shield",
                 modifier = Modifier
                     .size(96.dp)
-                    .clip(CircleShape)
-                    .background(Crimson500.copy(alpha = 0.15f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "Locked",
-                    tint = Crimson400,
-                    modifier = Modifier.size(48.dp)
-                )
-            }
+                    .clip(RoundedCornerShape(22.dp))
+            )
 
             // Title & App Name
             Column(

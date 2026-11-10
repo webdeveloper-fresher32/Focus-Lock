@@ -1,5 +1,6 @@
 package com.ganesh.focuslock.presentation.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,9 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ganesh.focuslock.R
 import com.ganesh.focuslock.core.navigation.Screen
 import com.ganesh.focuslock.core.theme.*
 import com.ganesh.focuslock.core.utils.TimeUtils
@@ -53,20 +56,32 @@ fun DashboardScreen(
         contentPadding = PaddingValues(top = 24.dp, bottom = 96.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Header
+        // Header with Official Logo
         item {
-            Column {
-                Text(
-                    text = "FocusLock",
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Black,
-                        color = TextPrimary
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = "FocusLock Logo",
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                )
+                Column {
+                    Text(
+                        text = "FocusLock",
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Black,
+                            color = TextPrimary
+                        )
                     )
-                )
-                Text(
-                    text = "Defend your interview preparation time.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
-                )
+                    Text(
+                        text = "Defend your interview preparation time.",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    )
+                }
             }
         }
 
