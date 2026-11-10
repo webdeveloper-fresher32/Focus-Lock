@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">FocusLock</string>
+    <string name="accessibility_service_label">FocusLock Protection Service</string>
+    <string name="accessibility_service_description">Monitors foreground applications to enforce focus session restrictions and daily limits for interview preparation and deep work.</string>
+</resources>
+
