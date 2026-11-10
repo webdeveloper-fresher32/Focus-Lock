@@ -1,5 +1,7 @@
 # FocusLock 🛡️ — Anti-Distraction Screen Time Blocker (Android)
 
+[![Download APK](https://img.shields.io/badge/Download-FocusLock%20v1.0.0%20APK-10B981?style=for-the-badge&logo=android&logoColor=white)](https://github.com/webdeveloper-fresher32/Focus-Lock/releases/latest)
+
 [![Platform](https://img.shields.io/badge/Platform-Android%208.0%2B%20(API%2026%2B)-brightgreen.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
 [![UI](https://img.shields.io/badge/UI-Jetpack%20Compose%20%2B%20Material%203-purple.svg)](https://developer.android.com/jetpack/compose)
