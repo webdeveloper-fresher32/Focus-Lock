@@ -14,6 +14,17 @@ Unlike passive screen-time monitors that merely observe and generate reports, Fo
 
 ---
 
+## 🎬 Product Demo Video
+
+> 🎙️ **Voiceover:** Full walkthrough narrated using the developer's cloned voice (synthesized locally on Apple Silicon with F5-TTS).
+
+https://github.com/webdeveloper-fresher32/Focus-Lock/raw/main/FocusLock_Demo_ClonedVoice.mp4
+
+> [!TIP]
+> If the embedded player above doesn't load in your browser, **[click here to view or download the 1080p demo video directly](FocusLock_Demo_ClonedVoice.mp4)**.
+
+---
+
 ## ✨ Key Features
 
 - ⏱️ **Flexible Focus Durations**:

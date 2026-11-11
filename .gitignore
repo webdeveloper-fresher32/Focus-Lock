@@ -13,3 +13,6 @@ app/build/
 .cxx
 *.apk
 *.aab
+/app/release/
+*.wav
+my audio.jpeg

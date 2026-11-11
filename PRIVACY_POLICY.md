@@ -50,3 +50,4 @@ FocusLock does not address anyone under the age of 13. We do not knowingly colle
 ## 5. Contact Us
 If you have any questions or concerns regarding this Privacy Policy, please reach out via GitHub:
 - **Repository**: [https://github.com/webdeveloper-fresher32/Focus-Lock](https://github.com/webdeveloper-fresher32/Focus-Lock)
+
